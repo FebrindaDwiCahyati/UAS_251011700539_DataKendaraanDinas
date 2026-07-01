@@ -124,7 +124,7 @@ $data = mysqli_query($koneksi, "SELECT * FROM kendaraan ORDER BY id_kendaraan AS
                                 <?php if ($row['foto_kendaraan'] == "") { ?>
                                     -
                                 <?php } else { ?>
-                                    <img src="upload/<?= $row['foto_kendaraan']; ?>" width="80">
+                                    <img src="<?= $row['foto_kendaraan']; ?>" width="80">
                                 <?php } ?>
                             </td>
                             <td><?= $row['no_polisi']; ?></td>
