@@ -1,5 +1,5 @@
 <?php
-$host     = "://tidbcloud.com";
+$host     = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com";
 $user     = "3nkBdoh6yKZfSNY.root";
 $password = "CbzIpuhuzVG17IMt"; 
 $database = "db_kendaraan_dinas";
