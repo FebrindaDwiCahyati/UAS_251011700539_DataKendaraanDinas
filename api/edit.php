@@ -28,18 +28,15 @@ if (isset($_POST['update'])) {
     /* UPLOAD FOTO */
     if (!empty($_FILES['foto_kendaraan']['name'])) {
 
-        if ($foto != "" && file_exists("upload/" . $foto)) {
-            unlink("upload/" . $foto);
-        }
-
         $namaFile = $_FILES['foto_kendaraan']['name'];
         $tmp      = $_FILES['foto_kendaraan']['tmp_name'];
         $ext      = strtolower(pathinfo($namaFile, PATHINFO_EXTENSION));
         $izin     = ['jpg', 'jpeg', 'png', 'webp'];
 
         if (in_array($ext, $izin)) {
-            $foto = time() . "_" . $namaFile;
-            move_uploaded_file($tmp, "upload/" . $foto);
+            $isi_file = file_get_contents($tmp);
+            $base64   = base64_encode($isi_file);
+            $foto     = "data:image/" . $ext . ";base64," . $base64;
         }
     }
 
@@ -149,7 +146,7 @@ if (isset($_POST['update'])) {
 
                     <div class="col-md-12 text-center mb-3">
                         <?php if ($data['foto_kendaraan'] != "") { ?>
-                            <img id="preview" src="upload/<?= $data['foto_kendaraan']; ?>" width="220">
+                            <img id="preview" src="<?= $data['foto_kendaraan']; ?>" width="220">
                         <?php } else { ?>
                             <img id="preview" style="display:none;" width="220">
                         <?php } ?>

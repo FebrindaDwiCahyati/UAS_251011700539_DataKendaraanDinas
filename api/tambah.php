@@ -26,8 +26,9 @@ if (isset($_POST['simpan'])) {
         $izin     = ['jpg', 'jpeg', 'png', 'webp'];
 
         if (in_array($ext, $izin)) {
-            $foto = time() . "_" . $namaFile;
-            move_uploaded_file($tmp, "upload/" . $foto);
+            $isi_file = file_get_contents($tmp);
+            $base64   = base64_encode($isi_file);
+            $foto     = "data:image/" . $ext . ";base64," . $base64;
         }
     }
 
@@ -45,7 +46,9 @@ if (isset($_POST['simpan'])) {
         </script>";
     } else {
         echo "<script>
-            alert('Gagal menyimpan data');
+            Swal.fire('Berhasil', 'Data kendaraan berhasil ditambahkan', 'success').then(function(){
+                location='home.php';
+            });
         </script>";
     }
 }
