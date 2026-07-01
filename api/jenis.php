@@ -72,7 +72,7 @@ $jenis = mysqli_query($koneksi, "
                 <tr>
                     <td class="text-center">
                         <?php if ($row['foto_kendaraan']) { ?>
-                            <img src="upload/<?= $row['foto_kendaraan']; ?>" width="60" height="60" style="object-fit:cover;border-radius:8px;">
+                            <img src="<?= $row['foto_kendaraan']; ?>" width="80">
                         <?php } else echo "-"; ?>
                     </td>
                     <td><?= $row['no_polisi']; ?></td>
