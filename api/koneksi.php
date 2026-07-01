@@ -66,11 +66,11 @@ function session_gc_custom($max_lifetime) {
 }
 
 session_set_save_handler(
-    "session_open",
-    "session_close",
-    "session_read",
-    "session_write",
+    "session_open_custom",
+    "session_close_custom",
+    "session_read_custom",
+    "session_write_custom",
     "session_destroy_data",
-    "session_gc"
+    "session_gc_custom"
 );
 ?>
