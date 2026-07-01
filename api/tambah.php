@@ -1,74 +1,80 @@
 <?php
-include "koneksi.php";
 session_start();
+include "koneksi.php";
 
 if (!isset($_SESSION['login'])) {
-    header("Location:index.php");
+    header("Location: index.php");
     exit;
 }
 
 if (isset($_POST['simpan'])) {
 
-    $no_polisi        = mysqli_real_escape_string($koneksi, $_POST['no_polisi']);
+    $no_polisi        = strtoupper(mysqli_real_escape_string($koneksi, $_POST['no_polisi']));
     $nama_kendaraan   = mysqli_real_escape_string($koneksi, $_POST['nama_kendaraan']);
     $jenis_kendaraan  = mysqli_real_escape_string($koneksi, $_POST['jenis_kendaraan']);
-    $tahun_beli       = $_POST['tahun_beli'];
-    $kondisi          = $_POST['kondisi'];
+    $tahun_beli       = (int) $_POST['tahun_beli'];
+    $kondisi          = mysqli_real_escape_string($koneksi, $_POST['kondisi']);
     $penanggung_jawab = mysqli_real_escape_string($koneksi, $_POST['penanggung_jawab']);
     $tanggal_input    = $_POST['tanggal_input'];
 
-    $foto = "";
+    $cek = mysqli_query($koneksi, "SELECT no_polisi FROM kendaraan WHERE no_polisi='$no_polisi'");
+    if (mysqli_num_rows($cek) > 0) {
+        echo "<script>
+            alert('No Polisi sudah terdaftar!');
+            history.back();
+        </script>";
+        exit;
+    }
 
+    $foto = "";
     if (!empty($_FILES['foto_kendaraan']['name'])) {
-        $namaFile = $_FILES['foto_kendaraan']['name'];
-        $tmp      = $_FILES['foto_kendaraan']['tmp_name'];
-        $ext      = strtolower(pathinfo($namaFile, PATHINFO_EXTENSION));
-        $izin     = ['jpg', 'jpeg', 'png', 'webp'];
+        $tmp = $_FILES['foto_kendaraan']['tmp_name'];
+        $ext = strtolower(pathinfo($_FILES['foto_kendaraan']['name'], PATHINFO_EXTENSION));
+        $izin = ['jpg', 'jpeg', 'png', 'webp'];
 
         if (in_array($ext, $izin)) {
             $isi_file = file_get_contents($tmp);
-            $base64   = base64_encode($isi_file);
-            $foto     = "data:image/" . $ext . ";base64," . $base64;
+            $foto = "data:image/$ext;base64," . base64_encode($isi_file);
         }
     }
 
-    $simpan = mysqli_query($koneksi, "
+    $query = mysqli_query($koneksi, "
         INSERT INTO kendaraan
         (no_polisi, nama_kendaraan, jenis_kendaraan, tahun_beli, kondisi, penanggung_jawab, foto_kendaraan, tanggal_input)
         VALUES
         ('$no_polisi', '$nama_kendaraan', '$jenis_kendaraan', '$tahun_beli', '$kondisi', '$penanggung_jawab', '$foto', '$tanggal_input')
     ");
 
-    if ($simpan) {
+    if ($query) {
         echo "<script>
             alert('Data kendaraan berhasil ditambahkan');
-            location='home.php';
+            window.location='home.php';
         </script>";
     } else {
         echo "<script>
-            Swal.fire('Berhasil', 'Data kendaraan berhasil ditambahkan', 'success').then(function(){
-                location='home.php';
-            });
+            alert('Gagal menambahkan data');
+            history.back();
         </script>";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tambah Kendaraan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="assets/bootstrap.min.css">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    
+
 <?php include "partials/sidebar.php"; ?>
+
 <div class="content">
 <?php include "partials/header.php"; ?>
-
 
 <div class="container-fluid p-4">
     <div class="card shadow">
@@ -122,8 +128,7 @@ if (isset($_POST['simpan'])) {
 
                     <div class="col-md-6 mb-3">
                         <label>Tanggal Input</label>
-                        <input type="date" name="tanggal_input" class="form-control"
-                               value="<?= date('Y-m-d'); ?>" required>
+                        <input type="date" name="tanggal_input" class="form-control" value="<?= date('Y-m-d'); ?>" required>
                     </div>
 
                     <div class="col-md-12 mb-3">
@@ -148,6 +153,7 @@ if (isset($_POST['simpan'])) {
 </div>
 
 <?php include "partials/footer.php"; ?>
+</div>
 
 <script>
 function previewImage(event) {
