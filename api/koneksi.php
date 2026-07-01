@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_DEPRECATED);
 $host     = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com";
 $user     = "3nkBdoh6yKZfSNY.root";
 $password = "CbZIpuRuZVGl7TME"; 

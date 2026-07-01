@@ -1,12 +1,11 @@
 <?php
+include "koneksi.php";
 session_start();
 
 if (!isset($_SESSION['login'])) {
     header("Location:index.php");
     exit;
 }
-
-include "koneksi.php";
 
 if (isset($_GET['id'])) {
 

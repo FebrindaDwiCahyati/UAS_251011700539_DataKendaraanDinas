@@ -1,4 +1,5 @@
 <?php
+include "koneksi.php";
 session_start();
 
 if (!isset($_SESSION['login'])) {
@@ -7,7 +8,6 @@ if (!isset($_SESSION['login'])) {
 }
 
 require_once('vendor/autoload.php');
-include "koneksi.php";
 
 $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 

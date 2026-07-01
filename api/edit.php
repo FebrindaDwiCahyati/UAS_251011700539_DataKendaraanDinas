@@ -1,4 +1,5 @@
 <?php
+include "koneksi.php";
 session_start();
 
 if (!isset($_SESSION['login'])) {
@@ -6,7 +7,6 @@ if (!isset($_SESSION['login'])) {
     exit;
 }
 
-include "koneksi.php";
 
 $id = $_GET['id'];
 $data = mysqli_fetch_assoc(
